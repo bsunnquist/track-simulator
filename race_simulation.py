@@ -1,42 +1,68 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib import animation
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
-fig = plt.figure(figsize=(10,10))
-fig.set_dpi(100)
+# bounds of the room
+xlim = (0,30)
+ylim = (0,20)
 
-ax = plt.axes(xlim=(0, 10), ylim=(0, 10))
-patch = plt.Circle((5, -5), 1.0, fc='y')
+finish_line = 20
 
-finish_line = 5
-rankings = []
+fig = plt.figure()
+ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
+ax.grid()
+
+class Ball(object):
+    
+    def __init__(self, name, x, y, v):
+        """
+        :param x y: Initial position.
+        :param v: Initial velocity.
+        """
+        self.v = float(v)
+        self.x = float(x)
+        self.y = float(y)
+        self.name = name
+
+        self.scatter, = ax.plot([], [], 'o', markersize=20)
+        
+    def update(self):
+        self.x += self.v
+        self.scatter.set_data(self.x, self.y)
+        if self.x >= finish_line:
+            if self.name not in rankings:
+                print(self.name)
+                rankings.append(self.name)
+            self.scatter.set_data(finish_line, self.y)
+
+    def start(self):
+        self.scatter.set_data(self.x, self.y)
 
 def init():
-    patch.center = (5, 5)
-    ax.add_patch(patch)
-    return patch,
+    return []
 
-def animate(i):
-    x, y = patch.center
-    x = i
-    y = 5
-    
-    patch.center = (x, y)
-    if x >= finish_line: 
-        rankings.append(patch)
-        plt.close()
+def animate(t): 
+
+    if t==0.0:
+        print('starting')
+        for ball in balls:
+            ball.start()
     else:
-        patch.center = (x, y)
+        for ball in balls:
+            ball.update()
+            if len(rankings)==len(balls):
+                ani.event_source.stop()
+                print(rankings)
     
-    return patch,
+    # have to return an iterable
+    return [ball.scatter for ball in balls]
 
+balls = [Ball('bob', 0, 2, .3), 
+         Ball('jenny', 0, 4, .4), 
+         Ball('ben', 0, 6, .5)]
 
-anim = animation.FuncAnimation(fig, animate, 
-                               init_func=init, 
-                               frames=10,
-                               interval=500,
-                               blit=True,
-                               repeat=False)
-
+# interval in milliseconds
+# we're watching in slow motion (delta t is shorter than interval)
+rankings = []
+ani = animation.FuncAnimation(fig, animate, np.arange(0,finish_line,0.001), init_func=init, interval=100, blit=True, repeat=False)
 plt.show()
-print(rankings)
