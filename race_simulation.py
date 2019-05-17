@@ -2,18 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# bounds of the room
+#~~~~~~Bounds of the room~~~~~~
 xlim = (0,30)
 ylim = (0,20)
-
 finish_line = 20
 
+#~~~~~~Figure Aesthetics~~~~~~
 fig = plt.figure()
-ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
-ax.grid()
+ax = fig.add_subplot(111, autoscale_on=True, xlim=xlim, ylim=ylim)
+plt.axvline(finish_line, color='k')
+plt.xlim(0, finish_line+5)
+plt.text(finish_line+1, 12, 'Finish!', fontsize=20, rotation=90)
 
 class Ball(object):
-    
+
     def __init__(self, name, x, y, v):
         """
         :param x y: Initial position.
@@ -25,7 +27,7 @@ class Ball(object):
         self.name = name
 
         self.scatter, = ax.plot([], [], 'o', markersize=20)
-        
+
     def update(self):
         self.x += self.v
         self.scatter.set_data(self.x, self.y)
@@ -41,7 +43,7 @@ class Ball(object):
 def init():
     return []
 
-def animate(t): 
+def animate(t):
 
     if t==0.0:
         print('starting')
@@ -53,12 +55,12 @@ def animate(t):
             if len(rankings)==len(balls):
                 ani.event_source.stop()
                 print(rankings)
-    
+
     # have to return an iterable
     return [ball.scatter for ball in balls]
 
-balls = [Ball('bob', 0, 2, .3), 
-         Ball('jenny', 0, 4, .4), 
+balls = [Ball('bob', 0, 2, .3),
+         Ball('jenny', 0, 4, .6),
          Ball('ben', 0, 6, .5)]
 
 # interval in milliseconds
