@@ -9,7 +9,7 @@ finish_line = 20
 
 #~~~~~~Figure Aesthetics~~~~~~
 fig = plt.figure()
-ax = fig.add_subplot(111, autoscale_on=True, xlim=xlim, ylim=ylim)
+ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
 plt.axvline(finish_line, color='k')
 plt.xlim(0, finish_line+5)
 plt.text(finish_line+1, 12, 'Finish!', fontsize=20, rotation=90)
@@ -59,6 +59,8 @@ def animate(t):
     # have to return an iterable
     return [ball.scatter for ball in balls]
 
+#                           this # tells you by how much X is going to increase every frame
+#                           example: .3 means X is going up by .3 every 1000ms (which is the interval)
 balls = [Ball('bob', 0, 2, .3),
          Ball('jenny', 0, 4, .6),
          Ball('ben', 0, 6, .5)]
@@ -66,5 +68,5 @@ balls = [Ball('bob', 0, 2, .3),
 # interval in milliseconds
 # we're watching in slow motion (delta t is shorter than interval)
 rankings = []
-ani = animation.FuncAnimation(fig, animate, np.arange(0,finish_line,0.001), init_func=init, interval=100, blit=True, repeat=False)
+ani = animation.FuncAnimation(fig, animate, np.arange(0,finish_line,0.001), init_func=init, interval=1000, blit=True, repeat=False)
 plt.show()
