@@ -2,17 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-#~~~~~~Bounds of the room~~~~~~
-xlim = (0,30)
-ylim = (0,20)
-finish_line = 20
+#~~~~~~Future Input Parameters~~~~~~
+distance = 400 # meters
+time     = 60  # seconds
+nplayers = 20  # players
+
+#~~~~~~Bounds of the racetrack~~~~~~
+xlim = (0,distance+(0.5*distance))
+ylim = (0,nplayers)
 
 #~~~~~~Figure Aesthetics~~~~~~
 fig = plt.figure()
 ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
-plt.axvline(finish_line, color='k')
-plt.xlim(0, finish_line+5)
-plt.text(finish_line+1, 12, 'Finish!', fontsize=20, rotation=90)
+plt.axvline(distance, color='k')
+plt.text(distance+1, 12, 'Finish!', fontsize=20, rotation=90)
 
 class Ball(object):
 
@@ -31,11 +34,11 @@ class Ball(object):
     def update(self):
         self.x += self.v
         self.scatter.set_data(self.x, self.y)
-        if self.x >= finish_line:
+        if self.x >= distance:
             if self.name not in rankings:
                 print(self.name)
                 rankings.append(self.name)
-            self.scatter.set_data(finish_line, self.y)
+            self.scatter.set_data(distance, self.y)
 
     def start(self):
         self.scatter.set_data(self.x, self.y)
@@ -59,14 +62,17 @@ def animate(t):
     # have to return an iterable
     return [ball.scatter for ball in balls]
 
+# calculating v
+v = distance/time
 #                           this # tells you by how much X is going to increase every frame
 #                           example: .3 means X is going up by .3 every 1000ms (which is the interval)
+#
 balls = [Ball('bob', 0, 2, .3),
-         Ball('jenny', 0, 4, .6),
+         Ball('jenny', 0, 4, v),
          Ball('ben', 0, 6, .5)]
 
 # interval in milliseconds
 # we're watching in slow motion (delta t is shorter than interval)
 rankings = []
-ani = animation.FuncAnimation(fig, animate, np.arange(0,finish_line,0.001), init_func=init, interval=1000, blit=True, repeat=False)
+ani = animation.FuncAnimation(fig, animate, np.arange(0, distance, .01), init_func=init, interval=1, blit=True, repeat=False)
 plt.show()
