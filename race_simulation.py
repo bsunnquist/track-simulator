@@ -1,3 +1,4 @@
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -83,12 +84,15 @@ def trackSim(name, distance, time, nplayers, interval=1):
 
     frames = np.arange(0, distance, .001)
 
+    limit = 0.2*time
+
     balls = []
     for n in np.arange(0, nplayers+1, 1):
-        start_pos = 0+n
+        runner_pos = 0+n
 
-        if start_pos != player_pos:
-            ball = Ball('player '+str(n), 0, start_pos, 0.3)
+        if runner_pos != player_pos:
+            runner_time = random.randint(time-limit,time+limit)
+            ball = Ball('runner '+str(n), 0, runner_pos, distance/runner_time)
             balls.append(ball)
 
     player_name = Ball(name, 0, player_pos, distance/time)
