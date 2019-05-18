@@ -69,7 +69,7 @@ def trackSim(name, distance, time, nplayers, interval=1):
     def animate(t):
 
         if t==0.0:
-            print('starting')
+            print('starting!')
             for ball in balls:
                 ball.start()
         else:
