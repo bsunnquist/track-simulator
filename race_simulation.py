@@ -50,15 +50,22 @@ def trackSim(name, distance, time, nplayers, interval=1):
             self.name = name
 
             self.scatter, = ax.plot([], [], 'o', markersize=20)
+            #self.text, = ax.annotate(str(self.name), xy=([], []))
 
         def update(self):
             self.x += self.v
             self.scatter.set_data(self.x, self.y)
+            #self.text.set_text(self.x, self.y)
+
             if self.x >= distance:
-                if self.name not in rankings:
-                    print(self.name)
-                    rankings.append(self.name)
                 self.scatter.set_data(distance, self.y)
+                if self.name not in rankings:
+                    final_time = np.round((1/self.v)*distance, 2)
+                    print(self.name, ' with a final time of '\
+                                     +str(final_time)\
+                                     +' seconds')
+                    rankings.append(self.name)
+
 
         def start(self):
             self.scatter.set_data(self.x, self.y)
@@ -75,9 +82,10 @@ def trackSim(name, distance, time, nplayers, interval=1):
         else:
             for ball in balls:
                 ball.update()
+
                 if len(rankings)==len(balls):
                     ani.event_source.stop()
-                    print(rankings)
+                    #print(rankings)
 
         # have to return an iterable
         return [ball.scatter for ball in balls]
