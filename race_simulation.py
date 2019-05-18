@@ -27,13 +27,14 @@ def trackSim(name, distance, time, nplayers, interval=1):
     """
     #~~~~~~Bounds of the racetrack~~~~~~
     xlim = (0,distance+(0.5*distance))
-    ylim = (0,nplayers)
+    ylim = (0,nplayers+1)
+    player_pos = nplayers/2 # starting position of the player
 
     #~~~~~~Figure Aesthetics~~~~~~
     fig = plt.figure()
     ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
     plt.axvline(distance, color='k')
-    plt.text(distance+1, 12, 'Finish!', fontsize=20, rotation=90)
+    plt.text(distance+(2), nplayers/1.5, 'Finish!', fontsize=20, rotation=90)
 
     class Ball(object):
 
@@ -83,17 +84,17 @@ def trackSim(name, distance, time, nplayers, interval=1):
     frames = np.arange(0, distance, .001)
 
     balls = []
-    for n in np.arange(0, nplayers, 1):
-        ball = Ball('player '+str(n), 0, 0+n, .3)
-        balls.append(ball)
+    for n in np.arange(0, nplayers+1, 1):
+        start_pos = 0+n
 
-    player_name = Ball(name, 0, 4, distance/time)
+        if start_pos != player_pos:
+            ball = Ball('player '+str(n), 0, start_pos, 0.3)
+            balls.append(ball)
+
+    player_name = Ball(name, 0, player_pos, distance/time)
 
     balls.append(player_name)
 
-
-    # interval in milliseconds
-    # we're watching in slow motion (delta t is shorter than interval)
     rankings = []
     ani = animation.FuncAnimation(fig, animate, frames, init_func=init,
                                   interval=interval, blit=True, repeat=False)
