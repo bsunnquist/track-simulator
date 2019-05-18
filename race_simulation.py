@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-def trackSim(name, distance, time, nplayers, interval):
+def trackSim(name, distance, time, nplayers, interval=1):
     """ Runs the track simulator!
 
     Parameters
