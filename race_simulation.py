@@ -36,10 +36,11 @@ def trackSim(name, distance, time, nplayers, interval=1):
     ax = fig.add_subplot(111, autoscale_on=False, xlim=xlim, ylim=ylim)
     plt.axvline(distance, color='k')
     plt.text(distance+(2), nplayers/1.5, 'Finish!', fontsize=20, rotation=90)
+    plt.style.use('seaborn-pastel')
 
     class Ball(object):
 
-        def __init__(self, name, x, y, v):
+        def __init__(self, input_name, x, y, v):
             """
             :param x y: Initial position.
             :param v: Initial velocity.
@@ -47,9 +48,10 @@ def trackSim(name, distance, time, nplayers, interval=1):
             self.v = float(v)
             self.x = float(x)
             self.y = float(y)
-            self.name = name
+            self.name = input_name
 
             self.scatter, = ax.plot([], [], 'o', markersize=20)
+
             #self.text, = ax.annotate(str(self.name), xy=([], []))
 
         def update(self):
@@ -65,7 +67,6 @@ def trackSim(name, distance, time, nplayers, interval=1):
                                      +str(final_time)\
                                      +' seconds')
                     rankings.append(self.name)
-
 
         def start(self):
             self.scatter.set_data(self.x, self.y)
