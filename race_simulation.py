@@ -1,9 +1,10 @@
+import argparse
 import random
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-def trackSim(name, distance, time, nplayers, interval=1):
+def trackSim(name, distance, time, nplayers=10, interval=1):
     """ Runs the track simulator!
 
     Parameters
@@ -112,3 +113,69 @@ def trackSim(name, distance, time, nplayers, interval=1):
     ani = animation.FuncAnimation(fig, animate, frames, init_func=init,
                                   interval=interval, blit=True, repeat=False)
     plt.show()
+
+def parse_args():
+    """ Parses command line arguments.
+
+    Returns
+    -------
+    args : obj
+        An ``argparse`` object containing all of the added arguments.
+    """
+
+    # Create help strings
+    name_help = 'Your name (or whichever name you want your player to have).'
+    distance_help = 'The length you want your player to run for (meters).'
+    time_help = 'Your average time for the selected distance (seconds).'
+    nplayers_help = 'The amount of runners you want to compete against. Default = 10 runners.'
+    interval_help = 'The time (in milliseconds) in between frames. Default = 1 millisecond.'
+
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-n',
+        dest='name',
+        action='store',
+        type=str,
+        required=True,
+        help=name_help)
+    parser.add_argument('-d',
+        dest='distance',
+        action='store',
+        type=int,
+        required=True,
+        help=distance_help)
+    parser.add_argument('-t',
+        dest='time',
+        type=int,
+        action='store',
+        required=True,
+        help=time_help)
+    parser.add_argument('-p',
+        dest='nplayers',
+        action='store',
+        type=int,
+        required=False,
+        default=10,
+        help=nplayers_help)
+    parser.add_argument('-i --interval',
+        dest='interval',
+        action='store',
+        type=int,
+        required=False,
+        help=interval_help,
+        default=1)
+
+    # Set defaults
+    parser.set_defaults(nplayers=10, interval=1)
+
+    # Parse args
+    args = parser.parse_args()
+
+    return args
+
+
+if __name__ == '__main__':
+
+    args = parse_args()
+
+    trackSim(args.name, args.distance, args.time, args.nplayers, args.interval)
